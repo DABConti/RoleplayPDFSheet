@@ -1078,6 +1078,381 @@ public class TextFields implements PdfPCellEvent {
     }
     
     /**
+     * Takes a PdfPTable and appends some number of blanc rows to it.
+     * @param table
+     * @param rows
+     * @param noBorder if true, adds no boarder to the cells
+     */
+    public void fillTable(PdfPTable table, int rows, boolean noBorder)
+    {
+    	for(int i = 0; i<table.getNumberOfColumns()*rows; i++)
+        {
+    		PdfPCell cell = new PdfPCell(this.getDefaultPhrase(" "));
+    		if (noBorder)
+    		{
+    			cell.setBorder(Rectangle.NO_BORDER);
+    		}
+    		table.addCell(cell);
+        }
+    	
+    	return;
+    }
+    
+
+    /**
+     * Takes a PdfPTable and appends some number of blanc rows to it.
+     * @param table
+     * @param rows
+     * @param noBorder if true, adds no boarder to the cells
+     */
+    public void fillTable(PdfPTable table, int rows)
+    {
+    	this.fillTable(table, rows, false);
+    	return;
+    }
+    
+    /**
+     * Creates a character sheet for dave's storytelling system.
+     * @param filename the path to the new PDF document
+     * @param doSpellSheet, if you want to add a spellsheet to this document
+     * @throws    DocumentException 
+     * @throws    IOException 
+     */
+    public void createCharacterSheetStorytelling(String filename,  boolean doSpellSheet) throws DocumentException, IOException {
+    	// step 1
+        Document document = new Document();
+        // step 2
+        if(doSpellSheet)
+        {
+        	filename = filename + "AndSpell";
+        }
+        PdfWriter.getInstance(document, new FileOutputStream(filename + "Sheet.pdf"));
+     
+        // step 3
+        document.open();
+        // step 4
+        
+        String titleString = "";
+        
+        titleString = "Storytelling Character Sheet";
+        		
+        
+        
+        Paragraph title = new Paragraph(titleString, FontFactory.getFont(FontFactory.TIMES, 25, Font.BOLD, new BaseColor(0, 0, 0)));
+        title.setAlignment(Paragraph.ALIGN_CENTER);
+        title.setSpacingAfter(2f);
+        document.add(title);
+        
+        PdfPTable playerInfoTable = new PdfPTable(5);
+        playerInfoTable.setWidths(new float[]{ 2, 2, 2, 1.25f, 1});
+        playerInfoTable.setWidthPercentage(100);
+        
+        PdfPCell cell = new PdfPCell(this.getDefaultPhrase("Player: ____________"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Name: ____________"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Faction: ___________"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Race: _____"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Age: _____"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Features: __________"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);      
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Motavation: ________"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Morality: __________"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Build: _____"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Level: ____"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        playerInfoTable.addCell(cell);
+        
+        playerInfoTable.setSpacingAfter(15f);
+        
+        document.add(playerInfoTable);
+        
+        
+        PdfPTable attributeTable = new PdfPTable(5);
+        attributeTable.setWidths(new int[]{ 1, 1, 1, 1, 1});
+        attributeTable.setWidthPercentage(105);
+        //row 1
+        
+        attributeTable.addCell(this.getDefaultPhrase("Vigour:"));
+        attributeTable.addCell(this.getDefaultPhrase("Reflex:"));
+        attributeTable.addCell(this.getDefaultPhrase("Wits:"));
+        attributeTable.addCell(this.getDefaultPhrase("Charisma:"));
+        attributeTable.addCell(this.getDefaultPhrase("Speed (base):"));
+        
+        //row 2
+        attributeTable.addCell(this.getDefaultPhrase("Wounds:"));
+        attributeTable.addCell(this.getDefaultPhrase("Wounds Max:"));
+        attributeTable.addCell(this.getDefaultPhrase("Def (melee):"));
+        attributeTable.addCell(this.getDefaultPhrase("Def (ranged):"));
+        attributeTable.addCell(this.getDefaultPhrase("Init (base):"));
+        
+        //row 3
+        attributeTable.addCell(this.getDefaultPhrase("Ingots:"));
+        attributeTable.addCell(this.getDefaultPhrase("Melee Atk:"));
+        attributeTable.addCell(this.getDefaultPhrase("Ranged Atk:"));
+        attributeTable.addCell(this.getDefaultPhrase(""));
+        attributeTable.addCell(this.getDefaultPhrase(""));
+
+        attributeTable.setSpacingAfter(15f);
+        document.add(attributeTable);
+        
+        PdfPTable armourTable = new PdfPTable(6);
+        
+        armourTable.setWidths(new float[]{ 2.75f, 1.25f, 1.5f, 1.25f, 1.25f, 4f});
+        armourTable.setWidthPercentage(105);
+        
+        armourTable.addCell(this.getDefaultPhrase("Armour"));
+        armourTable.addCell(this.getDefaultPhrase("Def Bonus"));
+        armourTable.addCell(this.getDefaultPhrase("Type."));
+        armourTable.addCell(this.getDefaultPhrase("Atk Pen."));
+        armourTable.addCell(this.getDefaultPhrase("Spd Pen."));
+        armourTable.addCell(this.getDefaultPhrase("Notes"));
+        
+        this.fillTable(armourTable, 4);
+        
+        armourTable.setSpacingAfter(10f);
+        document.add(armourTable);
+        
+        PdfPTable meleeWeaponsTable = new PdfPTable(6);
+        meleeWeaponsTable.setWidths(new float[]{ 3, 1.5f, 0.75f, 0.75f, 0.75f, 4.25f });
+        meleeWeaponsTable.setWidthPercentage(105);
+        
+        meleeWeaponsTable.addCell(this.getDefaultPhrase("Weapon"));
+        meleeWeaponsTable.addCell(this.getDefaultPhrase("Dmg Type"));
+        meleeWeaponsTable.addCell(this.getDefaultPhrase("Init Mod"));
+        meleeWeaponsTable.addCell(this.getDefaultPhrase("Spd Pen"));
+        meleeWeaponsTable.addCell(this.getDefaultPhrase("Def Mod"));
+        meleeWeaponsTable.addCell(this.getDefaultPhrase("Notes"));
+        
+        this.fillTable(meleeWeaponsTable, 3, false);
+        meleeWeaponsTable.setSpacingAfter(10f);
+        
+        document.add(meleeWeaponsTable);
+        
+        PdfPTable rangedWeaponsTable = new PdfPTable(6);
+        
+        rangedWeaponsTable.setWidths(new float[]{ 3, 1.5f, 0.75f, 0.75f, 1.5f, 3.5f });
+        rangedWeaponsTable.setWidthPercentage(105);
+        
+        rangedWeaponsTable.addCell(this.getDefaultPhrase("Ranged Weapon"));
+        rangedWeaponsTable.addCell(this.getDefaultPhrase("Dmg Type"));
+        rangedWeaponsTable.addCell(this.getDefaultPhrase("Range"));
+        rangedWeaponsTable.addCell(this.getDefaultPhrase("Rld"));
+        rangedWeaponsTable.addCell(this.getDefaultPhrase("Ammo/Mags"));
+        rangedWeaponsTable.addCell(this.getDefaultPhrase("Notes:"));
+        
+        this.fillTable(rangedWeaponsTable, 2);
+        rangedWeaponsTable.setSpacingAfter(10f);
+        
+        document.add(rangedWeaponsTable);
+        
+        
+        
+        
+        PdfPTable skillTitleTable = new PdfPTable(4);
+        skillTitleTable.setWidths(new int[]{ 1, 1, 1, 1 });
+        skillTitleTable.setWidthPercentage(105);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Vigour Proficiencies"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        skillTitleTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Reflex Proficiencies"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        skillTitleTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Mental Proficiencies"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        skillTitleTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Charisma Proficiencies"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        skillTitleTable.addCell(cell);
+        
+        document.add(skillTitleTable);
+        
+        PdfPTable skillsTable = new PdfPTable(4);
+        skillsTable.setWidths(new int[]{ 1, 1, 1, 1 });
+        skillsTable.setWidthPercentage(105);
+        
+        this.fillTable(skillsTable, 5);
+        skillsTable.setSpacingAfter(10f);
+        
+        document.add(skillsTable);
+        
+        PdfPTable meritTitleTable = new PdfPTable(1);
+        meritTitleTable.setWidths(new int[]{ 1 });
+        meritTitleTable.setWidthPercentage(105);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Merits"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        meritTitleTable.addCell(cell);
+        
+        document.add(meritTitleTable);
+        
+        PdfPTable meritsTable = new PdfPTable(1);
+        meritsTable.setWidths(new int[]{ 1 });
+        meritsTable.setWidthPercentage(105);
+        
+        this.fillTable(meritsTable, 8);
+              
+        meritsTable.setSpacingAfter(10f);  
+        document.add(meritsTable);
+
+        PdfPTable itemTable = new PdfPTable(2);
+        itemTable.setWidths(new int[]{ 1, 1});
+        itemTable.setWidthPercentage(105);
+        
+        itemTable.addCell(this.getDefaultPhrase("Item"));
+        itemTable.addCell(this.getDefaultPhrase("Notes"));
+        
+        this.fillTable(itemTable, 6, true);
+        
+        document.add(itemTable);
+        
+        PdfPTable calculationsTable = new PdfPTable(1);
+        calculationsTable.setWidths(new int[]{ 1 });
+        calculationsTable.setWidthPercentage(105);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Calculations:"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        calculationsTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Wounds = 5 + Merits; Wound Max = 10 + Vigour + Merits; Initiative = Reflex + Merits + Weapon Init Mod;", 8));
+        cell.setBorder(Rectangle.NO_BORDER);
+        calculationsTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Base Attack = Proficiency Bonus; Base Skill Check = Proficiency Bonus + Attribute Bonus (if applicable)", 8));
+        cell.setBorder(Rectangle.NO_BORDER);
+        calculationsTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Speed = 15 + Merits + armour, equipment and wound penalties;", 8));
+        cell.setBorder(Rectangle.NO_BORDER);
+        calculationsTable.addCell(cell);
+        
+        document.add(calculationsTable);
+        
+        /*
+        if(doSpellSheet)
+        {
+        
+	        PdfPTable spellTitleTable = new PdfPTable(1);
+	        spellTitleTable.setWidths(new int[]{ 1});
+	        spellTitleTable.setWidthPercentage(105);
+	        
+	        cell = new PdfPCell(this.getDefaultPhrase("Spells:"));
+	        cell.setBorder(Rectangle.NO_BORDER);
+	        spellTitleTable.addCell(cell);
+	        
+	        document.add(spellTitleTable);
+	        
+	        PdfPTable spellTable = new PdfPTable(13);
+	        
+	        spellTable.setWidths(new float[]{ 1, 1, 3, 1, 1, 1, 1, 4, 10, 1.5f, 1.5f, 1.5f, 1.5f });
+	        spellTable.setWidthPercentage(105);
+	        
+	        spellTable.addCell(this.getDefaultPhrase("Lore", 7));
+	        spellTable.addCell(this.getDefaultPhrase("MP", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Spell Name", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Pts", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Rnk", 7));
+	        spellTable.addCell(this.getDefaultPhrase("WP", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Cst #", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Reagents", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Spell Effects", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Dmg", 7));
+	        spellTable.addCell(this.getDefaultPhrase("AOE", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Dur", 7));
+	        spellTable.addCell(this.getDefaultPhrase("Rng", 7));
+	        
+	        for(int i = 0; i<45; i++)
+	        {
+	        	if(i%10==0)
+	        	{
+		        	for(int j = 0; j < 13; j++)
+		        	{
+		        		cell = new PdfPCell(this.getDefaultPhrase("\n", 1));
+		        		cell.setBackgroundColor(BaseColor.BLACK);
+		        		spellTable.addCell(cell);
+		        	}
+	        	}
+	        	
+	        	for(int j = 0; j < 13; j++)
+	        	{
+	        		spellTable.addCell(this.getDefaultPhrase("\n"));
+	        	}
+	        }
+	        
+	        for(int j = 0; j < 13; j++)
+	    	{
+	    		cell = new PdfPCell(this.getDefaultPhrase("\n", 1));
+	    		cell.setBackgroundColor(BaseColor.BLACK);
+	    		spellTable.addCell(cell);
+	    	}
+	        
+	        document.add(spellTable);
+	        
+	        document.newPage();
+	        
+        }
+        
+        PdfPTable meritFlawTitleTable = new PdfPTable(2);
+        
+        meritFlawTitleTable.setWidthPercentage(100);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Merits:"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        
+        meritFlawTitleTable.addCell(cell);
+        
+        cell = new PdfPCell(this.getDefaultPhrase("Flaws:"));
+        cell.setBorder(Rectangle.NO_BORDER);
+        meritFlawTitleTable.addCell(cell);
+        
+        document.add(meritFlawTitleTable);
+        
+        PdfPTable meritFlawTable = new PdfPTable(2);
+        
+        meritFlawTable.setWidthPercentage(100);
+        
+        for(int i = 0; i<30*2; i++)
+        {
+        	meritFlawTable.addCell(new Phrase("\n", FontFactory.getFont(FontFactory.HELVETICA , 20)));
+        }
+
+        document.add(meritFlawTable);
+        // step 5
+         * 
+         */
+        document.close();
+
+    }
+    
+    /**
      * Creates a PDF document.
      * @param filename the path to the new PDF document
      * @param universe, the universe for this sheet whf or wh40k or carme
@@ -1176,6 +1551,7 @@ public class TextFields implements PdfPCellEvent {
         attributeTable.addCell(this.getDefaultPhrase("Charisma:"));
         attributeTable.addCell(this.getDefaultPhrase(""));
         attributeTable.addCell(this.getDefaultPhrase("Init:"));
+        
         //row 2
         attributeTable.addCell(this.getDefaultPhrase("Fate Pts:"));
         attributeTable.addCell(this.getDefaultPhrase("Insanity:"));
@@ -1772,10 +2148,11 @@ public class TextFields implements PdfPCellEvent {
     public static void main(String[] args) throws DocumentException, IOException {
         TextFields example = new TextFields("0");
         //example.createNGSCharacterSheet(NCS, false);
-        example.createCharacterSheet(WHF, "whf", false);
+        example.createCharacterSheetStorytelling("Storytelling", false);
+        //example.createCharacterSheet(WHF, "whf", false);
         //example.createCharacterSheet(WH40k, "wh40k", false);
         //example.createCharacterSheet(CARME, "carme", false);
-        example.createNPCCharacterSheet();
+        //example.createNPCCharacterSheet();
         //example.createPdf(RESULT1);
         //example.manipulatePdf(RESULT1, RESULT2);
         
